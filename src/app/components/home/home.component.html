@@ -1,0 +1,282 @@
+<div class="page-root">
+  <!-- Header (100px tall, no buttons) -->
+  <header class="topbar">
+    <div class="brand-and-nav">
+      <div class="brand">FLOWFORGE</div>
+      <nav class="nav desktop-nav">
+        <a href="#features" (click)="$event.preventDefault(); scrollTo('features')">Features</a>
+        <a href="#how-it-works" (click)="$event.preventDefault(); scrollTo('how-it-works')">How it works</a>
+        <a href="#integrations" (click)="$event.preventDefault(); scrollTo('integrations')">Integrations</a>
+        <a href="#plans" (click)="$event.preventDefault(); scrollTo('plans')">Plans</a>
+        <a href="#testimonials" (click)="$event.preventDefault(); scrollTo('testimonials')">Testimonials</a>
+      </nav>
+    </div>
+    <a class="burger" href="#" aria-label="Open menu" (click)="$event.preventDefault(); toggleMobileMenu()">
+      <mat-icon>{{ mobileMenuOpen ? 'close' : 'menu' }}</mat-icon>
+    </a>
+  </header>
+  <div class="mobile-menu" *ngIf="mobileMenuOpen">
+    <mat-card>
+      <nav class="nav mobile-nav">
+        <a href="#features" (click)="$event.preventDefault(); scrollTo('features')">Features</a>
+        <a href="#how-it-works" (click)="$event.preventDefault(); scrollTo('how-it-works')">How it works</a>
+        <a href="#integrations" (click)="$event.preventDefault(); scrollTo('integrations')">Integrations</a>
+        <a href="#plans" (click)="$event.preventDefault(); scrollTo('plans')">Plans</a>
+        <a href="#testimonials" (click)="$event.preventDefault(); scrollTo('testimonials')">Testimonials</a>
+        <a href="#faq" (click)="$event.preventDefault(); scrollTo('faq')">FAQ</a>
+      </nav>
+    </mat-card>
+  </div>
+
+  <!-- Hero -->
+  <section id="hero" class="section hero">
+    <mat-card class="hero-card">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <h1>Ship projects 2x faster with FlowForge</h1>
+          <p>One place to plan, assign, and automate your team's work—no chaos, just clarity.</p>
+          <ul>
+            <li>Real-time Kanban, timelines, and goals in one place</li>
+            <li>Automated standups and status updates with AI summaries</li>
+            <li>Native GitHub, Slack, and calendar integrations</li>
+          </ul>
+          <div class="cta-row">
+            <button mat-raised-button color="primary" class="cta-primary">Start free</button>
+            <button mat-stroked-button class="cta-secondary">Book a demo</button>
+          </div>
+          <p class="microcopy">Free 14-day trial. No credit card needed.</p>
+        </div>
+      </div>
+    </mat-card>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="section">
+    <div class="container">
+      <h2>Everything you need to move work forward</h2>
+      <p class="sub">From backlog to release, FlowForge replaces scattered tools with a single, streamlined workflow.</p>
+      <div class="card-grid">
+        <mat-card class="feature-card"><h3>Kanban & Sprint Boards</h3><p>Flexible boards with swimlanes, WIP limits, and custom fields to match your process.</p></mat-card>
+        <mat-card class="feature-card"><h3>Timeline & Roadmaps</h3><p>Visualize initiatives, dependencies, and milestones to keep priorities clear.</p></mat-card>
+        <mat-card class="feature-card"><h3>Docs & Notes</h3><p>Lightweight docs linked to tasks so decisions never get lost.</p></mat-card>
+        <mat-card class="feature-card"><h3>Automations</h3><p>Auto-assign, sync statuses, and post updates to Slack without manual effort.</p></mat-card>
+        <mat-card class="feature-card"><h3>Workload & Capacity</h3><p>Balance assignments and spot bottlenecks with real-time capacity charts.</p></mat-card>
+        <mat-card class="feature-card"><h3>Analytics & Reports</h3><p>Cycle time, burndown, velocity, and goal progress—ready out of the box.</p></mat-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works + Todo demo -->
+  <section id="how-it-works" class="section alt">
+    <div class="container">
+      <h2>From idea to done in three clear steps</h2>
+      <p class="sub">Plan work, execute with focus, and report progress automatically.</p>
+      <div class="card-grid steps">
+        <mat-card class="feature-card"><h3>1) Plan</h3><p>Create goals, break down work, prioritize your backlog, and map timelines.</p></mat-card>
+        <mat-card class="feature-card"><h3>2) Execute</h3><p>Run sprints, track flow on boards, and automate status updates to stakeholders.</p></mat-card>
+        <mat-card class="feature-card"><h3>3) Report & Improve</h3><p>Review velocity, cycle time, and goal attainment to refine your process.</p></mat-card>
+      </div>
+
+      <!-- Embedded Todo categories & items demo -->
+      <mat-card class="todo-card">
+        <div class="todo-grid">
+          <div class="todo-col cats">
+            <h3>Categories</h3>
+            <div class="add-row">
+              <input [(ngModel)]="newCategoryName" placeholder="New category name" />
+              <button mat-stroked-button color="primary" (click)="addCategory()">Add</button>
+            </div>
+            <ul class="cat-list">
+              <li *ngFor="let c of categories" [class.active]="c.id === selectedCategoryId">
+                <a href="#" (click)="$event.preventDefault(); selectCategory(c.id)">{{c.name}}</a>
+              </li>
+            </ul>
+          </div>
+          <div class="todo-col items" *ngIf="selectedCategoryId as cid">
+            <h3>Items</h3>
+            <div class="add-row">
+              <input [(ngModel)]="newItemText" placeholder="Add a new item" />
+              <button mat-raised-button color="primary" (click)="addItem()">Add item</button>
+            </div>
+            <ul class="item-list">
+              <li *ngFor="let it of categories.find(x=>x.id===cid)?.items || []">
+                <label class="item-row">
+                  <input type="checkbox" [checked]="it.done" (change)="toggleDone(cid, it.id)" />
+                  <span [class.done]="it.done">{{it.text}}</span>
+                </label>
+                <button mat-stroked-button color="warn" class="remove-btn" (click)="removeItem(cid, it.id)">Remove</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <p class="microcopy">This lightweight demo shows category-based todos inside FlowForge’s workflow.</p>
+      </mat-card>
+    </div>
+  </section>
+
+  <!-- Integrations -->
+  <section id="integrations" class="section">
+    <div class="container">
+      <h2>Connect FlowForge to your stack</h2>
+      <p class="sub">Keep work in sync and notify the right people at the right time.</p>
+      <div class="card-grid">
+        <mat-card class="feature-card"><h3>Slack</h3><p>Send updates to channels, create tasks from messages, and run slash commands.</p></mat-card>
+        <mat-card class="feature-card"><h3>GitHub</h3><p>Link PRs to tasks, auto-close on merge, and track deployments.</p></mat-card>
+        <mat-card class="feature-card"><h3>Google Drive</h3><p>Attach files and keep versions in sync directly from tasks.</p></mat-card>
+        <mat-card class="feature-card"><h3>Jira Import</h3><p>Migrate projects, issues, and epics with field mapping in minutes.</p></mat-card>
+        <mat-card class="feature-card"><h3>Zapier</h3><p>Connect 5,000+ apps to automate handoffs and notifications.</p></mat-card>
+        <mat-card class="feature-card"><h3>Calendar</h3><p>See due dates and milestones across Google and Outlook calendars.</p></mat-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Plans -->
+  <section id="plans" class="section alt">
+    <div class="container">
+      <h2>Simple, scalable pricing</h2>
+      <p class="sub">Choose a plan that fits today and scales for tomorrow.</p>
+      <div class="plans-grid">
+        <mat-card class="plan-card">
+          <div class="plan-name">Starter</div>
+          <div class="price">$0 forever</div>
+          <ul class="plan-bullets">
+            <li>Up to 5 users</li>
+            <li>Boards, timelines, docs</li>
+            <li>Basic automation</li>
+            <li>Community support</li>
+          </ul>
+          <button mat-stroked-button>Start free</button>
+        </mat-card>
+        <mat-card class="plan-card featured">
+          <div class="plan-name">Growth</div>
+          <div class="price">$9 per user/month</div>
+          <ul class="plan-bullets">
+            <li>Unlimited users</li>
+            <li>Advanced automation & templates</li>
+            <li>Integrations + API access</li>
+            <li>Standard support</li>
+          </ul>
+          <button mat-raised-button color="accent" class="full">Start 14-day trial</button>
+        </mat-card>
+        <mat-card class="plan-card">
+          <div class="plan-name">Business</div>
+          <div class="price">$19 per user/month</div>
+          <ul class="plan-bullets">
+            <li>SSO (SAML) & SCIM</li>
+            <li>Advanced permissions & audit logs</li>
+            <li>Data export & retention policies</li>
+            <li>Priority support</li>
+          </ul>
+          <button mat-stroked-button>Contact sales</button>
+        </mat-card>
+      </div>
+      <p class="microcopy">Prices in USD. Taxes may apply.</p>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section id="testimonials" class="section">
+    <div class="container">
+      <h2>Trusted by fast-moving teams</h2>
+      <p class="sub">Leaders rely on FlowForge to deliver with clarity and speed.</p>
+      <div class="card-grid">
+        <mat-card class="quote-card"><p class="author">Maya Chen — VP Product, Atlas Robotics</p><p>“FlowForge cut our status meetings in half and made delivery dates predictable.”</p></mat-card>
+        <mat-card class="quote-card"><p class="author">Daniel Ruiz — Engineering Manager, NorthBeam</p><p>“Boards, docs, and reports in one tool finally got everyone on the same page.”</p></mat-card>
+        <mat-card class="quote-card"><p class="author">Priya Kapoor — COO, BrightLedger</p><p>“We scaled from 12 to 80 people without process chaos—FlowForge kept us aligned.”</p></mat-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Security -->
+  <section id="security" class="section alt">
+    <div class="container">
+      <h2>Enterprise-grade security by design</h2>
+      <p class="sub">Your data stays protected with layered controls and transparent practices.</p>
+      <div class="card-grid">
+        <mat-card class="feature-card"><h3>Compliance</h3><p>SOC 2 Type II controls with continuous monitoring and annual audits.</p></mat-card>
+        <mat-card class="feature-card"><h3>Data Residency</h3><p>Choose US or EU data hosting for regulatory needs.</p></mat-card>
+        <mat-card class="feature-card"><h3>Backups & DR</h3><p>Automated daily backups, point-in-time restore, and tested recovery plans.</p></mat-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="section">
+    <div class="container">
+      <h2>Answers to common questions</h2>
+      <p class="sub">If you don't see your question, we're happy to help.</p>
+      <mat-accordion class="faq">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Can we migrate from Jira or Trello?</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>Yes. Use our importers to bring in projects, issues/cards, epics, and users with field mapping.</p>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Do you offer SSO and SCIM?</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>Yes. Business plan includes SAML-based SSO and SCIM for automated user provisioning.</p>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>How does the free trial work?</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>You get 14 days of full access—no credit card required. Downgrade or upgrade anytime.</p>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Is my data secure?</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>Data is encrypted in transit and at rest, with least‑privilege access and audit logs.</p>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Do you have on-prem options?</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>We currently offer a secure cloud. Contact sales to discuss private cloud options.</p>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>What payment methods do you accept?</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>All major credit cards and annual invoicing for Business plans.</p>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <p class="microcopy">Live chat available during business hours.</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="f-col">
+        <div class="f-brand">FLOWFORGE</div>
+        <div class="f-blurb">FlowForge helps modern teams plan, execute, and report—without the busywork.</div>
+      </div>
+      <div class="f-col">
+        <div class="f-title">Product</div>
+        <a href="#features" (click)="$event.preventDefault(); scrollTo('features')">Features</a>
+        <a href="#integrations" (click)="$event.preventDefault(); scrollTo('integrations')">Integrations</a>
+        <a href="#plans" (click)="$event.preventDefault(); scrollTo('plans')">Plans</a>
+        <a href="#" aria-disabled="true">Templates</a>
+        <a href="#" aria-disabled="true">Changelog</a>
+      </div>
+      <div class="f-col">
+        <div class="f-title">Company</div>
+        <a href="#" aria-disabled="true">About</a>
+        <a href="#" aria-disabled="true">Careers</a>
+        <a href="#" aria-disabled="true">Blog</a>
+        <a href="#" aria-disabled="true">Contact</a>
+      </div>
+      <div class="f-col">
+        <div class="f-title">Legal</div>
+        <a href="#" aria-disabled="true">Privacy Policy</a>
+        <a href="#" aria-disabled="true">Terms of Service</a>
+        <a href="#security" (click)="$event.preventDefault(); scrollTo('security')">Security</a>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="container rights">© 2025 flowforge-project-management. All rights reserved.</div>
+  </footer>
+</div>
